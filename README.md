@@ -1,12 +1,12 @@
-Ultimarc-linux
+Pacdrive
 ==============
 
-Library and command line utility
+Command line utility for Ultimarc PacDrive board.
 
 #### Introduction:
-This utility will configure the following Ultimarc boards; ServoStik, PACDrive, IPAC Ultimate, I-Pac 2, I-Pac 4, Mini-Pac, JPAC, UltraStik 360, PacLED64, U-HID and U-HID Nano.  There is support for the PAC 2015 boards, Ultistik 2015 board and the previous generation of the PAC boards.  It uses json configuration files to configure the different boards.  It also supports the ability to change the device ID of the UltiStik 360 boards.  Allowing for the configuring of four different boards at once.
+This utility is a more specific implementation of the Ultimac-Linux project. This utility targets only the Ultimarc PacDrive board. 
 
-This library and command line utility support 2012 through 2015 boards.  If you need support for older Ultimarc boards, please look at the following utility developed by Travis, <a href='http://www.zumbrovalley.net/articles.php?catid=3'>Ipacutil</a> or use the Windows WinIpac v1 from <a href='http://www.ultimarc.com'>Ultimarc</a>
+If you need support for other Ultimarc boards, please look at the the Ultimarc-linux project by Katie-Snow.
 
 #### Required Libraries
 To build this tool the following libraries need to be install on your system.
@@ -30,8 +30,7 @@ If you need extra debug statements for the IPac boards then run the following
 * ./configure CFLAGS='-DDEBUG'
 * make
 
-The executable will be in src/umtool directory and named umtool.
-* ./umtool ipac2.json
+The executable will be in src/umtool directory and named pacdrive.
+* ./pacdrive 1 3 5 7 9 11 13 14   
+Turns on every other output by connecting it to ground.
 
-#### Donations:
-<a href='https://pledgie.com/campaigns/26846'><img alt='Click here to lend your support to: Ultimarc-Linux and make a donation at pledgie.com !' src='https://pledgie.com/campaigns/26846.png?skin_name=chrome' border='0' ></a>
