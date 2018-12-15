@@ -1,85 +1,38 @@
-Library and command line utility
+Pacdrive
+==============
 
-Introduction:
-This utility will configure the following Ultimarc boards; I-Pac 2, I-Pac 4, Mini-Pac, JPac, UltraStik 360, PACDrive, PacLED64 and IPAC Ultimate.  It uses JSON configuration files to configure the different boards.  It also supports the ability to change the device ID of the UltraStik 360 boards.  Allowing for the configuring of four different boards at once.
+Command line utility for Ultimarc PacDrive board.
 
-If you need support for older Ultimarc boards, please look at the following utility developed by Travis, Ipacutil or use the Windows WinIpac v1 from Ultimarc.
+#### Introduction:
+This utility is a more specific implementation of the Ultimac-Linux project. This utility targets only the Ultimarc PacDrive board. 
 
-Required Libraries:
-To build this tool the following libraries need to be install on your system.  
-  autoreconf,
-  automake,
-  libudev-dev,
-  json-c (0.11),
-  libusb-dev (1.0.18)
-  libtool
+If you need support for other Ultimarc boards, please look at the the Ultimarc-linux project by Katie-Snow.
 
+#### Required Libraries
+To build this tool the following libraries need to be install on your system.
+* autoreconf
+* automake
+* libudev-dev
+* json-c (0.11), <a href='https://github.com/json-c/json-c/wiki'>site</a>
+* libusb-1.0 (1.0.18), <a href='http://libusb.info'>site</a>
+* libtool
 
-UDEV Rule:
+#### UDEV Rule:
 This utility requires folder permission changes to the usb device directories before it can do the configuration changes to the boards.  The udev rule in the base directory named 21-ultimarc.rules needs to be placed in /etc/udev/rules.d directory.  Placing the file in that directory usually requires root permissions.
 
-Building Utility:
+#### Building Utility:
 To build this project, at the base directory run the following commands
-  ./configure
-  make
-The executable will be in src/umtool directory and named umtool.
-  ./umtool ipac2.json
+* ./autogen.sh
+* ./configure
+* make
 
+If you need extra debug statements for the IPac boards then run the following
+* ./configure CFLAGS='-DDEBUG'
+* make
 
-Configuration Files:
-There are example configuration files for each of the boards in the src/umtool or /usr/share/ultimarc/examples directory. The following is information about each configuration file.
-
-PAC boards:
-version: This should be set to 1(pre 2015 board) or 2(2015 and newer).  This is used for determining which version of the board to configure
-product: This is either 'ipac2', 'ipac4', 'minipac', 'jpac',  depending on what board you are configuring
-1/2 shift key: Key that will be used as the shift key for player 1 and 2
-3/4 shift key: Key that will be used as the shift key for player 3 and 4
-pins: List of all the pins(keys) that are on the board.  Please modify the example configuration files.
-macros: List of individual macros.  Each macro is an ordered list.  The pre2015 boards only support 4 macros with 4 entries each.  The 2015 boards support 30 macros with a limit of 85 entries for all macros.
- "m1" : ["", "", "", ""]
-
-
-UltiStik 360:
-version: This should be set to 1(pre 2015 board) or 2(2015 and newer).  This is used for determining which version of the board to configure
-Product: The UltiStik 360 product format “ultistik"
-
-The following entries are available when configuring the joystick
-controller id: This number is 1-4.  This states which joystick this configuration is for.
-map size: Always set to 9
-restrictor: true or false.  If you have the restrictor plate installed then this should be true
-flash: true or false.  If you want to flash the RAM.  See the ultiStik 360 webpage for more information
-borders: array with the following numbers [30, 58, 86, 114, 142, 170, 198, 226]
-map: An array with 81 elements for each square of the joystick.  The following strings are valid entries; 
-  “-”: empty
-  “C”: center command
-  “N”: North command
-  “NE”: North East command
-  “E”: East command
-  “SE”: South East command
-  “S”: South command
-  “SW”: South West command
-  “W”: West command
-  “NW”: North West command
-  “*”: Sticky command
-
-The following entries are available when changing the board ID
-current controller id: integer number 1-4 of what the controllers ID is currently
-new controller id: integer number 1-4 of what you want the controller id to become
-
-
-PacLED64:
-version: This should be set to 1 always.  This is used for version control of the configuration file in the future
-product: The pacLED64 product number in string format “1401”
-board id: This number is 1-4.  This states which board this configuration is for.
-fade: an array that is variable size each entry must have the following
-  led: Which led the fade value is for
-  fade: 0-3 are the valid integer options for this entry
-intensity: an array that is variable size each entry must have the following
-  led: Which led the intensity value is for
-  intensity: 0-255 are the valid integer values for this entry
-LED states random:  true or false.  If true then all the LED states (on/off) are set randomly by the board  
-LED fade all: 0-3 are the valid integer options for this entry.  NOTE: This entry and the fade array entry are not allowed in the same configuration file.  The utility will not process the configuration file since it will consider it invalid.
-LED intensity all: 0-255 are the valid integer values for this entry.  NOTE: This entry and the intensity array entry are not allowed in the same configuration file.  The utility will not process the configuration file since it will consider it invalid.
+The executable will be in src/umtool directory and named pacdrive.
+* ./pacdrive 1 3 5 7 9 11 13 14   
+Turns on every other output by connecting it to ground.
 
 
 PACDrive:
@@ -87,28 +40,3 @@ version: This should be set to 1 always.  This is used for version control of th
 product: The PACDrive product number in string format “1500”
 board id: This number is 1-4.  This states which board this configuration is for
 led: an array that is variable size.  It states which leds will be turned on.  Valid values are 1 - 16
-
-
-IPAC Ultimate:
-version: This should be set to 1 always.  This is used for version control of the configuration file in the future
-product: The IPAC Ultimate product number in string format “0410”
-board id: This number is 1-4.  This states which board this configuration is for
-pins: The array size is 48 and each entry is a object (key, value).  The value is an array with the format string, string, boolean.  The key value matches or closely matches the names printed on the board.
-x threshold: An integer between 0 and 127 inclusive.  This is a required entry when pins array is defined
-y threshold: An integer between 0 and 127 inclusive.  This is a required entry when pins array is defined
-
-intensity: an array that is variable size each entry must have the following
-  led: Which led the intensity value is for
-  intensity: 0-255 are the valid integer values for this entry
-LED states random:  true or false.  If true then all the LED states (on/off) are set randomly by the board  
-LED intensity all: 0-255 are the valid integer values for this entry.  NOTE: This entry and the intensity array entry are not allowed in the same configuration file.  The utility will not process the configuration file since it will consider it invalid.
-
-
-ServoStik:
-version: This should be set to 1 always.  This is used for version control of the configuration file in the future
-product: ServoStik
-switch: This is a required integer, that can be 4 or 8.
-hardware: This is a boolean value.  When true permanently sets the board to hardware only.  See Ultimarc website for information about this feature.  USE with caution.
-
-Donations:
-<a href='https://pledgie.com/campaigns/26846'><img alt='Click here to lend your support to: Ultimarc-Linux and make a donation at pledgie.com !' src='https://pledgie.com/campaigns/26846.png?skin_name=chrome' border='0' ></a>
